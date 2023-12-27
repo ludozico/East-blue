@@ -63,9 +63,7 @@ axs = axs.flatten()
 colors = ['Salmon', 'Green', 'Pink', 'purple']
 
 for i, (name, group_df) in enumerate(grouped_dfs.items()):
-    truncated_titles = group_df['Title'].apply(lambda x: truncate_label(x, max_label_length))
-    
-    sns.barplot(y=group_df['Score'], x=truncated_titles, color=colors[i], ax=axs[i])
+    sns.barplot(y=group_df['Score'], x=group_df['Title'], color=colors[i], ax=axs[i])
     axs[i].set_ylabel('Score', fontsize=15)
     axs[i].set_xlabel('Title', fontsize=15)
     axs[i].set_title(name, fontsize=20)
@@ -86,9 +84,8 @@ colors = ['Salmon', 'Green', 'Pink', 'purple']
 for i, (name, group_df) in enumerate(grouped_dfs.items()):
     # Sort the group_df by 'Watchers' in descending order for consistent ordering
     sorted_group_df = group_df.sort_values(by='Watchers', ascending=True)
-    truncated_titles = sorted_group_df['Title'].apply(lambda x: truncate_label(x, max_label_length))
     
-    sns.barplot(y=sorted_group_df['Watchers'], x=truncated_titles, color=colors[i], ax=axs[i])
+    sns.barplot(y=sorted_group_df['Watchers'], x=group_df['Title'], color=colors[i], ax=axs[i])
     axs[i].set_ylabel('Audience', fontsize=15)
     axs[i].set_xlabel('Title', fontsize=15)
     axs[i].set_title(name, fontsize=20)

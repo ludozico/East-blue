@@ -18,15 +18,8 @@ title_mapping = {
 df['Title'] = df['Title'].replace(title_mapping)
 df['Start_date'] = pd.to_datetime(df['Start_date'], errors='coerce')
 
-# Count the number of NaT values in 'Start_date'
-num_nat = df['Start_date'].isna().sum()
-
-print(f"Number of NaT values in 'Start_date': {num_nat}")
-
 # Now filter the DataFrame
-df2 = df2[df2['Start_date'] > datetime.datetime(2018, 1, 1)]
-
-
+df2 = df[df['Start_date'] > datetime.datetime(2018, 1, 1)]
 
 # Processing names
 names = df2['Main Role'].str.split(', ', expand=True).stack()

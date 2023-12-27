@@ -37,6 +37,14 @@ howfamous = df2[mask][['Main Role','Title','Score', 'Episodes', 'Watchers']]
 for i in howfamous.index:
     role_names = howfamous.loc[i, 'Main Role'].split(', ')
     howfamous.loc[i, 'Main Role'] = ', '.join(name for name in role_names if name in top_names)
-    
 howfamous.set_index('Main Role', inplace=True)
+# Convert top_names to list
+top_names = top_names.tolist()
+# Step 1: Group by index and convert to list of DataFrames
+grouped = list(howfamous.groupby(howfamous.index))
+# Step 2: Sort the list of DataFrames
+grouped.sort(key=lambda x: top_names.index(x[0]) if x[0] in top_names else len(top_names))
+# Step 3: Concatenate the list of DataFrames
+howfamous = pd.concat([group for _, group in grouped])
+
 print(howfamous)

@@ -38,14 +38,6 @@ top_names = name_counts.index[:4].tolist()
 # Create a function to check if any of the top names is in the 'Main Role'
 def contains_top_name(role):
     return any(name in role for name in top_names)
-
-def truncate_label(label, max_length):
-    """Truncate a label to a maximum length with an ellipsis."""
-    if len(label) > max_length:
-        return label[:max_length - 3] + '...'
-    return label
-
-max_label_length = 25
 # Apply the function to the 'Main Role' column
 df2 = df2[df2['Main Role'].apply(contains_top_name)]
 df2['Main Role'] = df2['Main Role'].apply(lambda x: ', '.join(name for name in x.split(', ') if name in top_names))

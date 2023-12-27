@@ -18,6 +18,13 @@ title_mapping = {
 df['Title'] = df['Title'].replace(title_mapping)
 df['Start_date'] = pd.to_datetime(df['Start_date'], errors='coerce')
 
+# Remove common non-numeric characters (e.g., commas, alphabets)
+df['Watchers'] = df['Watchers'].str.replace(',', '').str.replace(' viewers', '')
+# Strip leading/trailing whitespace
+df['Watchers'] = df['Watchers'].str.strip()
+# Convert to numeric values
+df['Watchers'] = pd.to_numeric(df['Watchers'], errors='coerce')
+
 # Now filter the DataFrame
 df2 = df[df['Start_date'] > datetime.datetime(2018, 1, 1)]
 
@@ -45,28 +52,58 @@ df2['Main Role'] = df2['Main Role'].apply(lambda x: ', '.join(name for name in x
 
 # Group and sort the data
 grouped_dfs = {name: df2[df2['Main Role'].str.contains(name)] for name in top_names}
+grouped = pd.concat(grouped_dfs.values(), keys=grouped_dfs.keys(), axis=0)
+grouped.set_index('Main Role', inplace=True)
+ldh = grouped.loc['Lee Do Hyun']
+sjk = grouped.loc['Song Joong Ki']
+onr = grouped.loc['Oh Na Ra']
+lje = grouped.loc['Lee Jung Eun']
 
-df2['Title'] = df2['Title'].replace(title_mapping)
 
+####################################################   
+
+
+#plot Title vs Score for each actor
 
 fig, axs = plt.subplots(2, 2, figsize=(16, 8))
 axs = axs.flatten()
 
-# Define a list of colors
 colors = ['Salmon', 'Green', 'Pink', 'purple']
 
-# Plot each grouped DataFrame
 for i, (name, group_df) in enumerate(grouped_dfs.items()):
-    # Truncate y-axis labels
     truncated_titles = group_df['Title'].apply(lambda x: truncate_label(x, max_label_length))
     
-    sns.barplot(x=group_df['Score'], y=truncated_titles, color=colors[i], ax=axs[i])
+    sns.barplot(y=group_df['Score'], x=truncated_titles, color=colors[i], ax=axs[i])
+    axs[i].set_ylabel('Score', fontsize=15)
+    axs[i].set_xlabel('Title', fontsize=15)
     axs[i].set_title(name, fontsize=20)
-    axs[i].set_xlabel('Score', fontsize=15)
-    axs[i].set_ylabel('Title', fontsize=15)
-    axs[i].set_xlim(8.5, 10)
-    axs[i].xaxis.set_major_locator(plt.MaxNLocator(6))
+    axs[i].set_ylim(8.5, 10)
+    axs[i].yaxis.set_major_locator(plt.MaxNLocator(6))
 
-# Adjust the layout and save the plot
 plt.tight_layout()
-plt.savefig('All_Plots.png', bbox_inches='tight')
+plt.savefig('Score_vs_Title.png', bbox_inches='tight')
+
+####################################################    
+
+# Plot Title vs Watchers for each actor
+fig, axs = plt.subplots(2, 2, figsize=(16, 8))
+axs = axs.flatten()
+
+colors = ['Salmon', 'Green', 'Pink', 'purple']
+
+for i, (name, group_df) in enumerate(grouped_dfs.items()):
+    # Sort the group_df by 'Watchers' in descending order for consistent ordering
+    sorted_group_df = group_df.sort_values(by='Watchers', ascending=True)
+    truncated_titles = sorted_group_df['Title'].apply(lambda x: truncate_label(x, max_label_length))
+    
+    sns.barplot(y=sorted_group_df['Watchers'], x=truncated_titles, color=colors[i], ax=axs[i])
+    axs[i].set_ylabel('Audience', fontsize=15)
+    axs[i].set_xlabel('Title', fontsize=15)
+    axs[i].set_title(name, fontsize=20)
+    axs[i].set_ylim(0, 120000)
+    axs[i].yaxis.set_major_locator(plt.MaxNLocator(integer=True))
+
+plt.tight_layout()
+plt.savefig('Sorted_Watchers_vs_Title.png', bbox_inches='tight')
+
+#####################################################

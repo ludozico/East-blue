@@ -1,4 +1,7 @@
-'''to correct the dates and names of the actors in the top 100 kdrama list'''
+"""
+This module imports necessary packages and performs data analysis on a Korean drama dataset.
+"""
+
 import datetime
 import pandas as pd
 import matplotlib.pyplot as plt

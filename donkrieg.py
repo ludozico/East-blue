@@ -1,6 +1,5 @@
 ''' This script is used to visualize the data from the redditdata.csv file. It creates a heatmap of the comment scores on the KDRAMA subreddit. '''
 
-import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns

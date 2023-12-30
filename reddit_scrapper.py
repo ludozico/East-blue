@@ -5,9 +5,9 @@ import csv
 import praw
 
 # Your Reddit script application credentials
-CLIENT_ID = 'uNBvZ5PPVgIaWv_b1Rbz4w'
-CLIENT_SECRET = '56AWnxllm8AEi4IeA_b3ZJ0iG0l7bg'
-USER_AGENT = 'script by /u/luizpsceo'
+CLIENT_ID = ''
+CLIENT_SECRET = ''
+USER_AGENT = 'LUDOZICO'
 
 # Initialize the PRAW Reddit client
 reddit = praw.Reddit(

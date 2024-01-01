@@ -25,7 +25,7 @@ class Friends:
 
     def celebrate(self, countdown, celebration):
         names_str = ", ".join(self.names)
-        print(f"{names_str}, que este ano\n seja um loop while True de alegrias e sucessos!!")
+        print(f"{names_str}, que este ano\nwhile 2024 == True:\n    Muitas alegrias e sucessos!")
         countdown.countdown()
         print(celebration.party_elements())
 

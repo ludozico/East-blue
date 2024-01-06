@@ -55,6 +55,8 @@ if result[1] <= 0.05:
 else:
     print("The series is not stationary.")
 
+print(train['target'].describe())
+
 # Decompose the series to observe trend and seasonality
 decomposition = seasonal_decompose(train['target'][:100000].dropna(),
                                    model='additive', period=24)
@@ -76,7 +78,6 @@ plt.plot(residual, label='Residuals')
 plt.legend(loc='best')
 plt.tight_layout()
 
-
 # applying ACF and PACF
 acf_result = acf(train['target'], nlags=72)
 pacf_result = pacf(train['target'], nlags=72)
@@ -84,31 +85,21 @@ pacf_result = pacf(train['target'], nlags=72)
 plt.figure(figsize=(15, 5))
 plt.subplot(121)
 plt.plot(acf_result)
-plt.xticks(np.arange(0, 71, 1))
 
 plt.subplot(122)
 plt.plot(pacf_result)
-plt.xticks(np.arange(0, 71, 1))
 plt.title('Partial Autocorrelation Function')
 plt.tight_layout()
 plt.show()
 
 #Determine rolling statistics
-rolmean = train['target'].rolling(window=201835).mean()
-rolstd = train['target'].rolling(window=201835).std()
+rolmean = train['target'].rolling(window=101335).mean()
+rolstd = train['target'].rolling(window=101335).std()
 
 #Plot rolling statistics
 orig = plt.plot(train['target'], color='blue', label='Original')
 mean = plt.plot(rolmean, color='red', label='Rolling Mean')
 plt.show(block=False)
-
-# AR model
-model = ARIMA(train['target'][:100000], order=(1,0,0))
-results_AR = model.fit()
-plt.plot(train['target'][:100000])
-plt.plot(results_AR.fittedvalues, color='red')
-plt.title(f'RSS: {sum((results_AR.fittedvalues - train["target"][:100000])**2):.4f}')
-print('Plotting AR model')
 
 # MA model
 model = ARIMA(train['target'][:100000], order=(0,0,1))
@@ -117,3 +108,11 @@ plt.plot(train['target'][:100000])
 plt.plot(results_MA.fittedvalues, color='red')
 plt.title(f'RSS: {sum((results_MA.fittedvalues - train["target"][:100000])**2):.4f}')
 print('Plotting MA model')
+
+# AR model
+model = ARIMA(train['target'][:100000], order=(1,0,0))
+results_AR = model.fit()
+plt.plot(train['target'][:100000])
+plt.plot(results_AR.fittedvalues, color='red')
+plt.title(f'RSS: {sum((results_AR.fittedvalues - train["target"][:100000])**2):.4f}')
+print('Plotting AR model')
